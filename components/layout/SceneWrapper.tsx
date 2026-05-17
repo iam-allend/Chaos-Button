@@ -7,6 +7,13 @@ import GlitchFlash from "@/components/chaos/GlitchFlash";
 import WarningOverlay from "@/components/chaos/WarningOverlay";
 import FloatingMessages from "@/components/chaos/FloatingMessages";
 import BackgroundDistortion from "@/components/chaos/BackgroundDistortion";
+import OsNotification from "@/components/chaos/OsNotification";
+import VoiceSubtitle from "@/components/chaos/VoiceSubtitle";
+import BrowserCorruption from "@/components/chaos/BrowserCorruption";
+import CursorDistortion from "@/components/chaos/CursorDistortion";
+import HorrorAtmosphere from "@/components/chaos/HorrorAtmosphere";
+import ChaosProgressBar from "@/components/chaos/ChaosProgressBar";
+import PhysicsLayer from "@/components/physics/PhysicsLayer";
 import { useScreenShake } from "@/hooks/useScreenShake";
 
 interface SceneWrapperProps {
@@ -18,20 +25,25 @@ export default function SceneWrapper({ children }: SceneWrapperProps) {
 
   return (
     <>
-      {/* Global chaos overlays — outside the shake wrapper so they don't shake */}
+      {/* ── Global overlays (outside shake) ── */}
       <GlitchFlash />
       <WarningOverlay />
       <FloatingMessages />
+      <OsNotification />
+      <VoiceSubtitle />
+      <BrowserCorruption />
+      <CursorDistortion />
+      <HorrorAtmosphere />
+      <ChaosProgressBar />
+      <PhysicsLayer />
 
-      {/* The shakeable scene */}
+      {/* ── Shakeable scene ── */}
       <motion.div
         className="relative min-h-screen w-full overflow-hidden bg-[#020408] flex flex-col items-center justify-center"
-        initial={{ opacity: 0 }}
         animate={shakeControls}
-        transition={{ duration: 1.2, ease: "easeOut" }}
         style={{ opacity: 1 }}
       >
-        {/* Intro fade-in */}
+        {/* Intro fade */}
         <motion.div
           className="absolute inset-0"
           initial={{ opacity: 0 }}
@@ -39,7 +51,7 @@ export default function SceneWrapper({ children }: SceneWrapperProps) {
           transition={{ duration: 1.2, ease: "easeOut" }}
         />
 
-        {/* Deep space background gradient */}
+        {/* Deep background */}
         <div className="absolute inset-0 bg-gradient-radial from-[#0a0f1e] via-[#020408] to-black" />
 
         {/* Ambient glow blobs */}
@@ -47,14 +59,12 @@ export default function SceneWrapper({ children }: SceneWrapperProps) {
         <div className="absolute bottom-1/4 right-1/4 w-80 h-80 rounded-full bg-cyan-900/10 blur-[100px] pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-indigo-950/20 blur-[140px] pointer-events-none" />
 
-        {/* Background distortion — inside shake layer */}
+        {/* Phase 2 background effects */}
         <BackgroundDistortion />
-
-        {/* Animated layers */}
         <ParticleField />
         <AmbientGrid />
 
-        {/* Content */}
+        {/* Page content */}
         <div className="relative z-10 flex flex-col items-center justify-center w-full h-full">
           {children}
         </div>

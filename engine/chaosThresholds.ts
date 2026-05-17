@@ -27,6 +27,15 @@ export interface ChaosConfig {
   browserCorruptionLevel: number;
   horrorAtmosphere: number;
   ambientPulseSpeed: number;
+
+  // Phase 4 physics
+  physicsEnabled: boolean;
+  fragmentSpawnChance: number;   // 0-1
+  fragmentSpawnCount: number;    // max per event
+  panelSpawnChance: number;      // 0-1
+  floatingButtonChance: number;  // 0-1
+  gravityY: number;              // 0-3 multiplier
+  maxPhysicsBodies: number;      // performance cap
 }
 
 function lerp(a: number, b: number, t: number): number {
@@ -54,6 +63,13 @@ function lerpConfig(a: ChaosConfig, b: ChaosConfig, t: number): ChaosConfig {
     browserCorruptionLevel: Math.round(l(a.browserCorruptionLevel, b.browserCorruptionLevel)),
     horrorAtmosphere: l(a.horrorAtmosphere, b.horrorAtmosphere),
     ambientPulseSpeed: l(a.ambientPulseSpeed, b.ambientPulseSpeed),
+    physicsEnabled: t >= 0.5 ? b.physicsEnabled : a.physicsEnabled,
+    fragmentSpawnChance: l(a.fragmentSpawnChance, b.fragmentSpawnChance),
+    fragmentSpawnCount: Math.round(l(a.fragmentSpawnCount, b.fragmentSpawnCount)),
+    panelSpawnChance: l(a.panelSpawnChance, b.panelSpawnChance),
+    floatingButtonChance: l(a.floatingButtonChance, b.floatingButtonChance),
+    gravityY: l(a.gravityY, b.gravityY),
+    maxPhysicsBodies: Math.round(l(a.maxPhysicsBodies, b.maxPhysicsBodies)),
   };
 }
 
@@ -66,6 +82,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: false, soundIntensity: 0, voiceChance: 0,
     osNotificationChance: 0, cursorDistortionLevel: 0,
     browserCorruptionLevel: 0, horrorAtmosphere: 0, ambientPulseSpeed: 1,
+    physicsEnabled: false, fragmentSpawnChance: 0, fragmentSpawnCount: 0, panelSpawnChance: 0, floatingButtonChance: 0, gravityY: 1.2, maxPhysicsBodies: 0,
   }],
   [10, {
     shakeIntensity: 3, shakeDuration: 280, buttonEscapeRadius: 20,
@@ -75,6 +92,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 0.15, voiceChance: 0.2,
     osNotificationChance: 0.3, cursorDistortionLevel: 0,
     browserCorruptionLevel: 0, horrorAtmosphere: 0.05, ambientPulseSpeed: 1.1,
+    physicsEnabled: true, fragmentSpawnChance: 0.2, fragmentSpawnCount: 1, panelSpawnChance: 0, floatingButtonChance: 0, gravityY: 1.2, maxPhysicsBodies: 8,
   }],
   [25, {
     shakeIntensity: 7, shakeDuration: 380, buttonEscapeRadius: 70,
@@ -84,6 +102,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 0.3, voiceChance: 0.4,
     osNotificationChance: 0.55, cursorDistortionLevel: 1,
     browserCorruptionLevel: 0, horrorAtmosphere: 0.2, ambientPulseSpeed: 1.4,
+    physicsEnabled: true, fragmentSpawnChance: 0.5, fragmentSpawnCount: 2, panelSpawnChance: 0.15, floatingButtonChance: 0.1, gravityY: 1.4, maxPhysicsBodies: 20,
   }],
   [45, {
     shakeIntensity: 14, shakeDuration: 480, buttonEscapeRadius: 140,
@@ -93,6 +112,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 0.5, voiceChance: 0.6,
     osNotificationChance: 0.75, cursorDistortionLevel: 1,
     browserCorruptionLevel: 1, horrorAtmosphere: 0.45, ambientPulseSpeed: 1.8,
+    physicsEnabled: true, fragmentSpawnChance: 0.7, fragmentSpawnCount: 3, panelSpawnChance: 0.3, floatingButtonChance: 0.25, gravityY: 1.7, maxPhysicsBodies: 35,
   }],
   [65, {
     shakeIntensity: 22, shakeDuration: 560, buttonEscapeRadius: 220,
@@ -102,6 +122,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 0.7, voiceChance: 0.8,
     osNotificationChance: 0.9, cursorDistortionLevel: 2,
     browserCorruptionLevel: 2, horrorAtmosphere: 0.7, ambientPulseSpeed: 2.2,
+    physicsEnabled: true, fragmentSpawnChance: 0.85, fragmentSpawnCount: 4, panelSpawnChance: 0.5, floatingButtonChance: 0.4, gravityY: 2.0, maxPhysicsBodies: 50,
   }],
   [85, {
     shakeIntensity: 32, shakeDuration: 640, buttonEscapeRadius: 320,
@@ -111,6 +132,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 0.85, voiceChance: 0.95,
     osNotificationChance: 1, cursorDistortionLevel: 3,
     browserCorruptionLevel: 2, horrorAtmosphere: 0.88, ambientPulseSpeed: 2.8,
+    physicsEnabled: true, fragmentSpawnChance: 0.95, fragmentSpawnCount: 5, panelSpawnChance: 0.7, floatingButtonChance: 0.6, gravityY: 2.4, maxPhysicsBodies: 65,
   }],
   [100, {
     shakeIntensity: 45, shakeDuration: 750, buttonEscapeRadius: 450,
@@ -120,6 +142,7 @@ const ANCHORS: [number, ChaosConfig][] = [
     soundEnabled: true, soundIntensity: 1, voiceChance: 1,
     osNotificationChance: 1, cursorDistortionLevel: 3,
     browserCorruptionLevel: 3, horrorAtmosphere: 1, ambientPulseSpeed: 4,
+    physicsEnabled: true, fragmentSpawnChance: 1, fragmentSpawnCount: 6, panelSpawnChance: 0.9, floatingButtonChance: 0.8, gravityY: 3.0, maxPhysicsBodies: 80,
   }],
 ];
 

@@ -4,9 +4,10 @@ import { useState } from "react";
 import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
 import { useChaosStore } from "@/store/chaosStore";
 import { useButtonEscape } from "@/hooks/useButtonEscape";
+import { audioEngine } from "@/engine/audioEngine";
 
 export default function ChaosButton() {
-  const { incrementChaos, pressCount } = useChaosStore();
+  const { incrementChaos, pressCount, chaosScore } = useChaosStore();
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
   const escapeControls = useButtonEscape();
@@ -39,6 +40,7 @@ export default function ChaosButton() {
   };
 
   const handleClick = () => {
+    audioEngine.unlock(); // Must be called from user gesture
     setIsPressed(true);
     incrementChaos();
     setTimeout(() => setIsPressed(false), 300);
@@ -192,7 +194,7 @@ export default function ChaosButton() {
 }
 
 export default function ChaosButton() {
-  const { incrementChaos, pressCount } = useChaosStore();
+  const { incrementChaos, pressCount, chaosScore } = useChaosStore();
   const [isHovered, setIsHovered] = useState(false);
   const [isPressed, setIsPressed] = useState(false);
 
@@ -224,6 +226,7 @@ export default function ChaosButton() {
   };
 
   const handleClick = () => {
+    audioEngine.unlock(); // Must be called from user gesture
     setIsPressed(true);
     incrementChaos();
     setTimeout(() => setIsPressed(false), 300);
